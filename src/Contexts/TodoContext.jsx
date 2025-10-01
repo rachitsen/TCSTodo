@@ -2,37 +2,30 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 export const TodoContext = createContext();
-export const useTodo = () => useContext(TodoContext);
+export const useTodo = () => useContext(TodoContext); 
 
 export const TodoProvider = ({ children }) => {
+
   const [todos, setTodos] = useState([]);
   const [history, setHistory] = useState([]);
 
-  // ✅ Fetch initial todos
+
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/todos?_limit=10")
       .then((res) => {
-        const mapped = res.data.map((t) => ({
-          id: t.id,
-          todo: t.title,
-          completed: t.completed,
-          completedAt: null,
+        const mapped = res.data.map((task) => ({
+          id: task.id,
+          todo: task.title,
+          completed: task.completed,
+          completedAt: task.completed ? Date.now() : null,
         }));
 
-        mapped.map((task)=>{
-            if(task.completed){
-                task.completedAt=Date.now();
-            }
-        })
-
         setTodos(mapped);
-
         
       });
   }, []);
 
-  // ✅ Background sweep every 30s
   useEffect(() => {
     const interval = setInterval(() => {
       processTodos();
@@ -43,11 +36,11 @@ export const TodoProvider = ({ children }) => {
   const processTodos = () => {
     const now = Date.now();
     const expired = todos.filter(
-      (t) => t.completed && t.completedAt && now - t.completedAt >= 1 * 60 * 1000
+      (task) => task.completed && task.completedAt && now - task.completedAt >= 5 * 60 * 1000
     );
 
     if (expired.length > 0) {
-      setTodos((prev) => prev.filter((t) => !expired.includes(t)));
+      setTodos((prev) => prev.filter((task) => !expired.includes(task)));
       setHistory((prev) => [...prev, ...expired]);
     }
   };
@@ -57,36 +50,37 @@ export const TodoProvider = ({ children }) => {
   };
 
   const updateTodo = (id, updatedTodo) => {
-    setTodos(todos.map((t) => (t.id === id ? updatedTodo : t)));
+    setTodos(todos.map((task) => (task.id === id ? updatedTodo : task)));
   };
 
   const deleteTodo = (id) => {
-    setTodos(todos.filter((t) => t.id !== id));
+    setTodos(todos.filter((task) => task.id !== id));
   };
 
   const toggleComplete = (id) => {
     setTodos(
-      todos.map((t) =>
-        t.id === id
+      todos.map((task) =>
+        task.id === id
           ? {
-              ...t,
-              completed: !t.completed,
-              completedAt: !t.completed ? Date.now() : null,
+              ...task,
+              completedAt: !task.completed ? Date.now() : null,
+              completed: !task.completed,
+              
             }
-          : t
+          : task
       )
     );
   };
 
   const deleteHistory = (id) => {
-    setHistory(history.filter((t) => t.id !== id));
+    setHistory(history.filter((task) => task.id !== id));
   };
 
   const markIncomplete = (id) => {
-    const task = history.find((t) => t.id === id);
-    if (task) {
-      setHistory(history.filter((t) => t.id !== id));
-      setTodos([...todos, { ...task, completed: false, completedAt: null }]);
+    const newtask = history.find((task) => task.id === id);
+    if (newtask) {
+      setHistory(history.filter((task) => task.id !== id));
+      setTodos([...todos, { ...newtask, completed: false, completedAt: null }]);
     }
   };
 
@@ -108,3 +102,4 @@ export const TodoProvider = ({ children }) => {
     </TodoContext.Provider>
   );
 };
+

@@ -6,55 +6,59 @@ function TodoItem({ todo }) {
   const [todoMsg, setTodoMsg] = useState(todo.todo);
   const [isTodoEditable, setIsTodoEditable] = useState(false);
 
-  const editTodo = () => {
-    updateTodo(todo.id, { ...todo, todo: todoMsg });
-    setIsTodoEditable(false);
-  };
+ 
 
   return (
     <div
-      className={`flex items-center justify-between border border-black/10 rounded-lg px-3 py-2 
-        shadow-sm duration-300 text-black 
-        ${todo.completed ? "bg-green-100" : "bg-purple-100"}`}
+      className={`flex flex-col gap-2 border 
+        border-black/10 rounded-lg px-3 py-2 shadow-sm duration-300 text-black sm:flex-row sm:items-center sm:justify-between 
+        ${todo.completed ? "bg-green-200" : "bg-blue-100"}`}
     >
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        onChange={() => toggleComplete(todo.id)}
-        className="cursor-pointer"
-      />
+      
+      <div className="flex items-center flex-1">
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() => toggleComplete(todo.id)}
+          
+        />
 
-      <input
-        type="text"
-        className={`flex-1 mx-2 outline-none bg-transparent 
-          ${isTodoEditable ? "border px-2 rounded" : "border-transparent"} 
-          ${todo.completed ? "line-through text-gray-600" : ""}`}
-        value={todoMsg}
-        onChange={(e) => setTodoMsg(e.target.value)}
-        readOnly={!isTodoEditable}
-      />
+        <input
+          type="text"
+          className={`flex-1 mx-2 outline-none bg-transparent text-sm sm:text-base
+            ${isTodoEditable ? "border px-2 rounded" : "border-transparent"}
+            ${todo.completed ? "line-through text-gray-600" : ""}`}
+          value={todoMsg}
+          onChange={(e) => setTodoMsg(e.target.value)}
+          readOnly={!isTodoEditable}
+        />
+      </div>
 
-      <button
-        className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onClick={() => {
-          if (todo.completed) return;
-          if (isTodoEditable) {
-            editTodo();
-          } else {
-            setIsTodoEditable(true);
-          }
-        }}
-        disabled={todo.completed}
-      >
-        {isTodoEditable ? "Save" : "Edit"}
-      </button>
+     
+      <div className="flex gap-2 shrink-0">
+        <button
+          className="px-3 py-2 text-sm sm:text-base bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() => {
+            if (todo.completed) return;
+            if (isTodoEditable) {
+              updateTodo(todo.id, { ...todo, todo: todoMsg });
+              setIsTodoEditable(false);
+            } else {
+              setIsTodoEditable(true);
+            }
+          }}
+          disabled={todo.completed}
+        >
+          {isTodoEditable ? "Save" : "Edit"}
+        </button>
 
-      <button
-        className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 ml-2"
-        onClick={() => deleteTodo(todo.id)}
-      >
-        Delete
-      </button>
+        <button
+          className="px-3 py-2 text-sm sm:text-base bg-red-500 text-white rounded hover:bg-red-600"
+          onClick={() => deleteTodo(todo.id)}
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
