@@ -15,10 +15,10 @@ function App() {
 
             
             <div className="mb-6 flex gap-6 justify-center">
-              <NavLink to="/" className={({isActive}) => (isActive? "bg-blue-300 p-2 text-xl rounded-lg  text-blue-900 hover:no-underline, hover:rounded-none":" border-1 p-2 text-xl rounded-lg no-underline text-blue-900 hover:no-underline, hover:rounded-none")}>
+              <NavLink to="/" className={({isActive}) => (isActive? "bg-blue-300 p-2 text-xl rounded-lg  text-blue-900 shadow hover:no-underline, ":" border-1 p-2 text-xl rounded-lg no-underline text-blue-900 hover:no-underline, hover:rounded-none")}>
                 To-Do List
               </NavLink>
-              <NavLink to="/history" className={({isActive}) => (isActive? "bg-blue-300 p-2 text-xl rounded-lg  text-blue-900 hover:no-underline, hover:rounded-none":" border-1 p-2 text-xl rounded-lg no-underline text-blue-900 hover:no-underline, hover:rounded-none")}>
+              <NavLink to="/history" className={({isActive}) => (isActive? "bg-blue-300 p-2 text-xl rounded-lg  text-blue-900 hover:no-underline, ":" border-1 p-2 text-xl rounded-lg no-underline text-blue-900 hover:no-underline, hover:rounded-none")}>
                 History
               </NavLink>
             </div>
