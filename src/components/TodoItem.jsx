@@ -23,9 +23,6 @@ function TodoItem({ todo }) {
     onChange={() => toggleComplete(todo.id)}
     className="cursor-pointer"
   />
- <span className="absolute bottom-full mb-1 hidden group-hover:block bg-gray-700 text-white text-xs px-2 py-0.5 rounded whitespace-nowrap">
-  If checked, this task will move to History after 5 minutes
-</span>
 
 </div>
         <input
